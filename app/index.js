@@ -1,11 +1,12 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import AddTaskModal from "../components/AddTaskModal";
@@ -15,6 +16,7 @@ import { supabase } from "../lib/supabase";
 export default function HomeScreen() {
   const [tasks, setTasks] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const router = useRouter();
 
   async function loadTasks() {
     const { data, error } = await supabase
@@ -107,6 +109,13 @@ export default function HomeScreen() {
         onClose={() => setModalVisible(false)}
         onSubmit={handleSubmitTask}
       />
+
+      <TouchableOpacity
+        style={styles.fabCamera}
+        onPress={() => router.push("/camera")}
+      >
+        <MaterialIcons name="camera-alt" size={26} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -145,5 +154,21 @@ const styles = StyleSheet.create({
     color: "#aaa",
     marginTop: 40,
     fontSize: 15,
+  },
+  fabCamera: {
+    position: "absolute",
+    bottom: 30,
+    alignSelf: "center",
+    backgroundColor: "#2E5BBA",
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
 });
