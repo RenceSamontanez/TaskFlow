@@ -1,13 +1,15 @@
 import { CameraView, useCameraPermissions } from "expo-camera";
+import * as FileSystem from "expo-file-system/legacy";
+import { useRouter } from "expo-router";
 import { useRef } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
+  const router = useRouter();
 
   if (!permission) {
-    // Permission status is still loading
     return <View style={styles.container} />;
   }
 
@@ -30,7 +32,13 @@ export default function CameraScreen() {
   async function takePicture() {
     if (!cameraRef.current) return;
     const result = await cameraRef.current.takePictureAsync({ quality: 0.7 });
-    console.log("Captured photo URI:", result.uri); // temporary — remove once Phase 3 wires navigation
+
+    const fileName = `photo-${Date.now()}.jpg`;
+    const permanentUri = FileSystem.documentDirectory + fileName;
+    await FileSystem.copyAsync({ from: result.uri, to: permanentUri });
+
+    console.log("Photo copied to permanent location:", permanentUri);
+    router.push({ pathname: "/preview", params: { fileName } });
   }
 
   return (
