@@ -107,6 +107,15 @@ export default function ResultScreen() {
       </View>
 
       <TouchableOpacity
+        style={styles.personasButton}
+        onPress={() =>
+          router.push({ pathname: "/personas", params: { base64Image } })
+        }
+      >
+        <Text style={styles.personasButtonText}>Compare Personas</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
         style={styles.doneButton}
         onPress={() => router.push("/")}
       >
@@ -156,6 +165,14 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   chipText: { color: "#2E5BBA", fontSize: 13, fontWeight: "500" },
+  personasButton: {
+    backgroundColor: "#5B3FA3",
+    padding: 14,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  personasButtonText: { color: "#fff", fontWeight: "bold" },
   doneButton: {
     backgroundColor: "#2E5BBA",
     padding: 14,
